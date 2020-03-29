@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.Powerplatform.Cds.Client;
 using Microsoft.Xrm.Sdk;
 
-namespace src
+namespace CDSSolutionExport
 {
     class Program
     {
@@ -11,14 +11,15 @@ namespace src
         {
 
             if(string.IsNullOrEmpty(cdsConnectionString)) throw new ArgumentException("cdsConnectionString can't be empty");
+            if(string.IsNullOrEmpty(solutionName)) throw new ArgumentException("solutionName can't be empty");
+                        
             var cdsClient = new CdsServiceClient(cdsConnectionString);
 
             if(cdsClient.IsReady){
-                // var whoAmIRequest =  ();
-                // cdsClient.Execute(whoAmIRequest);
+                var solManager = new SolutionManager(cdsClient);
+                solManager.GetSolComponents(solutionName);
             }
 
-            Console.WriteLine("Hello World!");
         }
     }
 }
