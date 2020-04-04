@@ -13,11 +13,14 @@ namespace CDSSolutionExport
             if(string.IsNullOrEmpty(cdsConnectionString)) throw new ArgumentException("cdsConnectionString can't be empty");
             if(string.IsNullOrEmpty(solutionName)) throw new ArgumentException("solutionName can't be empty");
                         
-            var cdsClient = new CdsServiceClient(cdsConnectionString);
-
-            if(cdsClient.IsReady){
-                var solManager = new SolutionManager(cdsClient);
-                solManager.GetSolComponents(solutionName);
+            using(var cdsClient = new CdsServiceClient(cdsConnectionString)){
+                if(cdsClient.IsReady){
+                    var solManager = new SolutionManager(cdsClient);
+                    solManager.GetSolComponents(solutionName);
+                }
+                else{
+                    throw new Exception($"Unknown Connection Error:{cdsClient.LastCdsError}",cdsClient.LastCdsException);
+                }
             }
 
         }
